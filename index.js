@@ -1,0 +1,40 @@
+import express from 'express';
+
+import mongoose from 'mongoose';
+
+import * as Validators from './validations.js';
+
+import checkAuth from './utils/checkAuth.js';
+
+import * as UserController from './controllers/UserController.js'
+import * as PostController from './controllers/PostController.js'
+
+mongoose
+    .connect(
+        'mongodb+srv://matvisiv2:matvisiv2@cluster0.wpnvxf6.mongodb.net/blog?retryWrites=true&w=majority&appName=Cluster0'
+        // 'mongodb+srv://ivankist2:ivankist2_mongodb.com@cluster0.s58df8e.mongodb.net/blog?retryWrites=true&w=majority&appName=Cluster0'
+    )
+    .then(() => console.log('DB Ok'))
+    .catch((err) => console.log('DB error', err));
+
+const app = express();
+
+app.use(express.json());
+
+app.post('/auth/login', Validators.loginValidation, UserController.login);
+app.post('/auth/register', Validators.registerValidation, UserController.register);
+app.get('/auth/me', checkAuth, UserController.getMe);
+
+app.get('/posts', PostController.getAll);
+app.get('/posts/:id', PostController.getOne);
+app.post('/posts', checkAuth, Validators.postCreateValidation, PostController.create);
+app.delete('/posts/:id', checkAuth, PostController.remove);
+app.patch('/posts/:id', checkAuth, PostController.update);
+
+app.listen(4444, (err) => {
+    if (err) {
+        return console.log(err);
+    }
+
+    return console.log('Server OK');
+});
