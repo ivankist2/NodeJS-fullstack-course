@@ -1,3 +1,5 @@
+const PORT = 4444;
+
 import express from 'express';
 import multer from 'multer';
 
@@ -49,10 +51,10 @@ app.post('/posts', checkAuth, Validators.postCreateValidation, handleValidationE
 app.delete('/posts/:id', checkAuth, PostController.remove);
 app.patch('/posts/:id', checkAuth, Validators.postCreateValidation, handleValidationErrors, PostController.update);
 
-app.listen(4444, (err) => {
+app.listen(PORT, (err) => {
     if (err) {
         return console.log(err);
     }
 
-    return console.log('Server OK');
+    return console.log(`Server started on: http://localhost:${PORT}`);
 });
