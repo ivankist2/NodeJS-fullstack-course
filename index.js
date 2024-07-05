@@ -1,4 +1,5 @@
 import express from 'express';
+import multer from 'multer';
 
 import mongoose from 'mongoose';
 
@@ -19,11 +20,28 @@ mongoose
 
 const app = express();
 
+const storage = multer.diskStorage({
+    destination: (_, __, cb) => {
+        cb(null, 'uploads');
+    },
+    fileName: (_, file, cb) => {
+        cb(null, file.originalname);
+    },
+});
+
+const upload = multer({ storage });
+
 app.use(express.json());
 
 app.post('/auth/login', Validators.loginValidation, UserController.login);
 app.post('/auth/register', Validators.registerValidation, UserController.register);
 app.get('/auth/me', checkAuth, UserController.getMe);
+
+app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
+    res.json({
+        url: `/uploads/${req.file.originalname}`,
+    });
+});
 
 app.get('/posts', PostController.getAll);
 app.get('/posts/:id', PostController.getOne);
