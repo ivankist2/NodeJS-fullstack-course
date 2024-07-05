@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
     destination: (_, __, cb) => {
         cb(null, 'uploads');
     },
-    fileName: (_, file, cb) => {
+    filename: (_, file, cb) => {
         cb(null, file.originalname);
     },
 });
@@ -32,6 +32,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
 
 app.post('/auth/login', Validators.loginValidation, UserController.login);
 app.post('/auth/register', Validators.registerValidation, UserController.register);
