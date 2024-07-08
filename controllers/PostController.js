@@ -12,6 +12,19 @@ export const getAll = async (req, res) => {
     }
 };
 
+export const getLastTags = async (req, res) => {
+    try {
+        const posts = await PostModel.find().limit(5).exec();
+        const tags = posts.map(obj => obj.tags).flat().slice(0, 5);
+        res.json(tags);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: 'Unable to get list of posts',
+        })
+    }
+};
+
 export const getOne = async (req, res) => {
     try {
         const postId = req.params.id;
@@ -26,7 +39,7 @@ export const getOne = async (req, res) => {
             {
                 returnDocument: 'after',
             }
-        ).then((doc) => {
+        ).populate('user').exec().then((doc) => {
             if (!doc) {
                 return res.status(404).json({
                     message: 'Post not found',
