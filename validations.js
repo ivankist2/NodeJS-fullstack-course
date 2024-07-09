@@ -15,6 +15,6 @@ export const registerValidation = [
 export const postCreateValidation = [
     body('title', 'Enter post title').isLength({ min: 3 }).isString(),
     body('text', 'Enter post text').isLength({ min: 3 }).isString(),
-    body('tags', 'Invalid tags format (enter array)').optional().isString(),
+    body('tags', 'Invalid tags format (enter array)').optional().isArray(),
     body('imageUrl', 'Invalid image reference').optional().isURL(),
 ];
