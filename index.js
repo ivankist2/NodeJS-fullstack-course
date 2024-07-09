@@ -8,7 +8,7 @@ import mongoose from 'mongoose';
 
 import * as Validators from './validations.js';
 
-import { checkAuth, handleValidationErrors } from './utils/index.js';
+import { checkAuth, checkOwner, handleValidationErrors } from './utils/index.js';
 
 import { UserController, PostController } from './controllers/index.js';
 
@@ -51,8 +51,8 @@ app.get('/posts', PostController.getAll);
 app.get('/tags', PostController.getLastTags);
 app.get('/posts/:id', PostController.getOne);
 app.post('/posts', checkAuth, Validators.postCreateValidation, handleValidationErrors, PostController.create);
-app.delete('/posts/:id', checkAuth, PostController.remove);
-app.patch('/posts/:id', checkAuth, Validators.postCreateValidation, handleValidationErrors, PostController.update);
+app.delete('/posts/:id', checkOwner, PostController.remove);
+app.patch('/posts/:id', checkOwner, Validators.postCreateValidation, handleValidationErrors, PostController.update);
 
 app.listen(PORT, (err) => {
     if (err) {

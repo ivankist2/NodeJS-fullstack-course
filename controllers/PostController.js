@@ -123,7 +123,7 @@ export const update = async (req, res) => {
                 title: req.body.title,
                 text: req.body.text,
                 tags: req.body.tags,
-                user: req.userId,
+                // user: req.userId, // only owner can edit post
                 imageUrl: req.body.imageUrl,
             }
         );
